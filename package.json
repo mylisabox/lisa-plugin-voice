@@ -1,5 +1,5 @@
 {
-  "name": "lisa-plugin-hue",
+  "name": "lisa-plugin-sony-vpl",
   "main": "index.js",
   "version": "0.0.1",
   "scripts": {
@@ -9,10 +9,8 @@
     "extends": "trails"
   },
   "dependencies": {
-    "lisa-plugin": "^0.0.8",
-    "node-hue-api": "^2.3.0",
-    "snyk": "^1.19.1",
-    "tinycolor2": "^1.4.1"
+    "lisa-plugin": "^0.0.11",
+    "snyk": "^1.19.1"
   },
   "devDependencies": {
     "eslint": "^3.10.2",
@@ -20,7 +18,7 @@
     "lisa-box": "^0.0.13",
     "lodash": "^4.17.2",
     "mocha": "^3.1.2",
-    "smokesignals": "^1.2.2",
-    "trails": "^1.1.0"
+    "smokesignals": "^2.0.0",
+    "trails": "^2.0.0"
   }
 }

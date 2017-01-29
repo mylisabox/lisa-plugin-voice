@@ -1,0 +1,51 @@
+{
+  "name": "SONY VPL projectors",
+  "freeStates": {
+    "VPL_ON": {
+      "name": "Change light state",
+      "sentences": {
+        "fr": [
+          "allume(?: +\\w+){0,3} projecteur"
+        ],
+        "en": [
+          "(?:turn|switch|put|set)(?: +\\w+){0,3} projector on",
+          "(?:turn|switch|put|set) on(?: +\\w+){0,3} projector"
+        ]
+      },
+      "responses": {
+        "fr": [
+          "Voila",
+          "C'est fait"
+        ],
+        "en": [
+          "Done",
+          "It's done"
+        ]
+      }
+    },
+    "VPL_OFF": {
+      "name": "Change light state",
+      "sentences": {
+        "fr": [
+          "(?:éteins|éteint|éteindre)(?: +\\w+){0,3} projecteur"
+        ],
+        "en": [
+          "(?:turn|switch)(?: +\\w+){0,3} projector off",
+          "(?:turn|switch|put|set) off(?: +\\w+){0,3} projector"
+        ]
+      },
+      "responses": {
+        "fr": [
+          "Voila",
+          "C'est fait"
+        ],
+        "en": [
+          "Done",
+          "It's done"
+        ]
+      }
+    }
+  },
+  "nestedStates": {},
+  "links": []
+}

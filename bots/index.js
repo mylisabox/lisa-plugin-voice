@@ -1,1 +1,1 @@
-exports.hue = require('./hue.json')
+exports.projector = require('./projector.json')

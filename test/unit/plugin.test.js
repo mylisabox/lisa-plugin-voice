@@ -6,7 +6,7 @@ const assert = require('assert')
 describe('Plugin', () => {
   let plugin
   before(() => {
-    plugin = global.app.packs.pluginsManager.plugins['hue']
+    plugin = global.app.packs.pluginsManager.plugins['sonyVpl']
   })
 
   it('should exist', () => {
@@ -15,7 +15,7 @@ describe('Plugin', () => {
 
   it('should have service', () => {
     assert(plugin.services)
-    assert(plugin.services.HUEService)
+    assert(plugin.services.ProjectorService)
   })
 
 

@@ -1,1 +1,1 @@
-exports.HUEController = require('./HUEController')
+exports.ProjectorController = require('./ProjectorController')

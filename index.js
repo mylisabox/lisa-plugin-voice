@@ -2,7 +2,7 @@
 
 const Plugin = require('lisa-plugin')
 
-module.exports = class HuePlugin extends Plugin {
+module.exports = class SonyVPLPlugin extends Plugin {
 
   /**
    * Initialisation of your plugin
@@ -10,7 +10,7 @@ module.exports = class HuePlugin extends Plugin {
    * @returns Promise
    */
   init() {
-    return this.services.HUEService.init()
+    return this.services.ProjectorService.init()
   }
 
   /**
@@ -18,7 +18,7 @@ module.exports = class HuePlugin extends Plugin {
    * @return Promise
    */
   searchDevices() {
-    return this.services.HUEService.searchLights()
+    return this.services.ProjectorService.search()
   }
 
   /**

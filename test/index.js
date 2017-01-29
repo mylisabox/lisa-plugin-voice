@@ -8,13 +8,12 @@ const app = _.defaultsDeep(lisa, smokesignals.FailsafeConfig)
 
 before(() => {
   lisa.config.database.models.migrate = 'drop'
-  delete lisa.config.chatbot.params.room
   lisa.config.pluginManager = {
     dist: `${process.cwd()}/..`
   }
   global.app = new TrailsApp(app)
   return global.app.start().then(() => {
-    return global.app.services.PluginService._addPlugin('lisa-plugin-hue') // eslint-disable-line no-underscore-dangle
+    return global.app.services.PluginService._addPlugin('lisa-plugin-sony-vpl') // eslint-disable-line no-underscore-dangle
   })
 })
 

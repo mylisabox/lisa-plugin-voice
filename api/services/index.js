@@ -1,2 +1,2 @@
-exports.HUEService = require('./HUEService')
+exports.ProjectorService = require('./ProjectorService')
 exports.ChatBotService = require('./ChatBotService')
