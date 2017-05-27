@@ -12,8 +12,10 @@ module.exports = class ChatBotService extends Service {
     const options = {}
     switch (action) {
       case 'VPL_ON':
+        options.state = 'on'
         break
       case 'VPL_OFF':
+        options.state = 'off'
         break
       case 'VPL_RATIO':
         break
@@ -21,10 +23,16 @@ module.exports = class ChatBotService extends Service {
         break
       case 'VPL_INPUT':
         break
+      default:
+        return
     }
-    return this.lisa.findDevices({
-      roomId: room.id
-    }).then(devices => {
+
+    const criteria = {}
+    if (room) {
+      criteria.roomId = room.id
+    }
+
+    return this.lisa.findDevices(criteria).then(devices => {
       const setStates = []
       devices.forEach(device => {
         setStates.push(this.plugin.services.ProjectorService.setState(device, options))

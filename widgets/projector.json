@@ -3,6 +3,7 @@
   "children": [
     {
       "type": "hbox",
+      "flex": 2,
       "children": [
         {
           "type": "space",
@@ -11,9 +12,9 @@
         {
           "type": "image-button",
           "name": "state",
-          "path": "HUEController.setLightState",
-          "values": "data.values",
-          "value": "data.state"
+          "mainIndicator": true,
+          "values": "values",
+          "value": "power"
         },
         {
           "type": "space",
@@ -22,11 +23,33 @@
       ]
     },
     {
-      "type": "slider",
-      "name": "bri",
-      "flex": 0.4,
-      "path": "HUEController.setLightState",
-      "value": "data.bri"
+      "type": "hbox",
+      "children": [
+        {
+          "type": "space",
+          "flex": 0.1
+        },
+        {
+          "type": "button",
+          "name": "input1",
+          "text": "HDMI 1",
+          "flex": 0.3
+        },
+        {
+          "type": "space",
+          "flex": 0.2
+        },
+        {
+          "type": "button",
+          "name": "input2",
+          "text": "HDMI 2",
+          "flex": 0.3
+        },
+        {
+          "type": "space",
+          "flex": 0.1
+        }
+      ]
     }
   ]
 }

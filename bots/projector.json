@@ -2,7 +2,7 @@
   "name": "SONY VPL projectors",
   "freeStates": {
     "VPL_ON": {
-      "name": "Change light state",
+      "name": "Turn on the projector",
       "sentences": {
         "fr": [
           "allume(?: +\\w+){0,3} projecteur"
@@ -24,7 +24,7 @@
       }
     },
     "VPL_OFF": {
-      "name": "Change light state",
+      "name": "Turn off the projector",
       "sentences": {
         "fr": [
           "(?:éteins|éteint|éteindre)(?: +\\w+){0,3} projecteur"
@@ -32,6 +32,65 @@
         "en": [
           "(?:turn|switch)(?: +\\w+){0,3} projector off",
           "(?:turn|switch|put|set) off(?: +\\w+){0,3} projector"
+        ]
+      },
+      "responses": {
+        "fr": [
+          "Voila",
+          "C'est fait"
+        ],
+        "en": [
+          "Done",
+          "It's done"
+        ]
+      }
+    },
+    "VPL_RATION": {
+      "name": "Change image ratio of the projector",
+      "sentences": {
+        "fr": [
+        ],
+        "en": [
+        ]
+      },
+      "responses": {
+        "fr": [
+          "Voila",
+          "C'est fait"
+        ],
+        "en": [
+          "Done",
+          "It's done"
+        ]
+      }
+    },
+    "VPL_PRESET": {
+      "name": "Change calibration preset of the projector",
+      "sentences": {
+        "fr": [
+          "TODO"
+        ],
+        "en": [
+        ]
+      },
+      "responses": {
+        "fr": [
+          "Voila",
+          "C'est fait"
+        ],
+        "en": [
+          "Done",
+          "It's done"
+        ]
+      }
+    },
+    "VPL_INPUT": {
+      "name": "Change HDMI input of the projector",
+      "sentences": {
+        "fr": [
+        ],
+        "en": [
+
         ]
       },
       "responses": {

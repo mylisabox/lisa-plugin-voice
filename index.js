@@ -4,6 +4,21 @@ const Plugin = require('lisa-plugin')
 
 module.exports = class SonyVPLPlugin extends Plugin {
 
+  setDeviceValue(device, key, newValue) {
+    const options = {}
+    options[key] = newValue
+    if (key === 'state') {
+      return this.services.ProjectorService.setState(device, options)
+    }
+    else {
+      return this.services.ProjectorService.setInput(device, options)
+    }
+  }
+
+  setDevicesValue(devices, key, newValue) {
+
+  }
+
   /**
    * Initialisation of your plugin
    * Called once, when plugin is loaded
@@ -16,10 +31,10 @@ module.exports = class SonyVPLPlugin extends Plugin {
   /**
    * Called automatically to search for new devices
    * @return Promise
-   */
-  searchDevices() {
+
+   searchDevices() {
     return this.services.ProjectorService.search()
-  }
+  }*/
 
   /**
    * Called when
@@ -31,9 +46,12 @@ module.exports = class SonyVPLPlugin extends Plugin {
     return this.services.ChatBotService.interact(action, infos)
   }
 
+  unload() {
+    return this.services.ProjectorService.unload()
+  }
+
   constructor(app) {
     super(app, {
-      config: require('./config'),
       api: require('./api'),
       pkg: require('./package'),
       bots: require('./bots')
