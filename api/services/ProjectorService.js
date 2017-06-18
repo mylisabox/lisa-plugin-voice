@@ -1,7 +1,7 @@
 'use strict'
 
-const PORT = 53862
 const Service = require('lisa-plugin').Service
+const PORT = 53862
 const sdcp = require('../../lib/sdcp')
 const {commands, inputs, powerStatus} = require('../../lib/commands')
 const dgram = require('dgram')

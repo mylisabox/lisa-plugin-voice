@@ -29,14 +29,6 @@ module.exports = class SonyVPLPlugin extends Plugin {
   }
 
   /**
-   * Called automatically to search for new devices
-   * @return Promise
-
-   searchDevices() {
-    return this.services.ProjectorService.search()
-  }*/
-
-  /**
    * Called when
    * @param action to execute
    * @param infos context of the action
@@ -54,6 +46,7 @@ module.exports = class SonyVPLPlugin extends Plugin {
     super(app, {
       api: require('./api'),
       pkg: require('./package'),
+      config: require('./config'),
       bots: require('./bots')
     })
   }
