@@ -6,19 +6,23 @@
     "test": "eslint --fix . && mocha"
   },
   "eslintConfig": {
-    "extends": "trails"
+    "extends": "trails",
+    "rules": {
+      "no-control-regex": "off"
+    }
   },
   "dependencies": {
-    "lisa-plugin": "0.0.12"
+    "lisa-plugin": "^0.0.15",
+    "sony-sdcp-com": "^0.0.2"
   },
   "devDependencies": {
-    "snyk": "^1.19.1",
-    "eslint": "^3.10.2",
-    "eslint-config-trails": "^1.2.0",
-    "lisa-box": "^0.0.13",
-    "lodash": "^4.17.2",
-    "mocha": "^3.1.2",
-    "smokesignals": "^2.0.0",
-    "trails": "^2.0.0"
+    "eslint": "^4.0.0",
+    "eslint-config-trails": "^3.0.0",
+    "lisa-box": "^0.0.20",
+    "lodash": "^4.17.4",
+    "mocha": "^3.4.2",
+    "smokesignals": "^3.0.3",
+    "snyk": "^1.34.4",
+    "trails": "^2.0.2"
   }
 }

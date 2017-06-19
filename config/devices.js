@@ -12,23 +12,19 @@ module.exports = [
       fr: 'Ajout d\'un projecteur Sony VPL'
     },
     driver: 'vpl',
+    type: 'other',
+    template: template,
     image: 'projector.png',
     settings: [
       {
         controlType: 'textbox',
-        type: 'hidden',
-        name: 'template',
-        defaultValue: template,
-        required: true
-      },
-      {
-        controlType: 'textbox',
-        type: 'url',
+        type: 'ip',
         name: 'address',
         label: {
           en: 'IP address'
         },
-        required: true
+        required: true,
+        private: true
       },
       {
         controlType: 'textbox',
@@ -38,7 +34,8 @@ module.exports = [
           en: 'Port'
         },
         defaultValue: 53484,
-        required: true
+        required: true,
+        private: true
       }
     ]
   }

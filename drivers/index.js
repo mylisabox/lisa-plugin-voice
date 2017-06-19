@@ -1,1 +1,1 @@
-module.export.vpl = require('./vpl')
+exports.vpl = require('./vpl')

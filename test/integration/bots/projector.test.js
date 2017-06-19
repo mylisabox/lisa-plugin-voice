@@ -8,6 +8,9 @@ describe('Projector bot', () => {
   before(() => {
     service = global.app.services.ChatBotService
     ChatBot = global.app.orm.ChatBot
+    return global.app.orm.Room.create({name: 'Salon'}).then(() => {
+      return global.app.services.ChatBotService.reloadBots()
+    })
   })
 
   it('should exist', () => {

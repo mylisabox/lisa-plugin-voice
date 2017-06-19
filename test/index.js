@@ -14,6 +14,9 @@ before(() => {
   global.app = new TrailsApp(app)
   return global.app.start().then(() => {
     return global.app.services.PluginService._addPlugin('lisa-plugin-sony-vpl') // eslint-disable-line no-underscore-dangle
+  }).catch(err => {
+    global.app.log.error(err)
+    return Promise.resolve()
   })
 })
 

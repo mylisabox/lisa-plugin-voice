@@ -14,9 +14,7 @@ describe('Plugin', () => {
   })
 
   it('should have service', () => {
-    assert(plugin.services)
-    assert(plugin.services.ProjectorService)
+    assert(plugin.drivers)
+    assert(plugin.drivers.vpl)
   })
-
-
 })
