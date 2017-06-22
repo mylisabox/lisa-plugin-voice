@@ -2,8 +2,8 @@
 
 const Driver = require('lisa-plugin').Driver
 const PORT = 53862
-const {commands, powerStatus, SdcpClient} = require('sony-sdcp-com')
-const {inputs} = require('../lib/commands')
+const { commands, powerStatus, SdcpClient } = require('sony-sdcp-com')
+const { inputs } = require('../lib/commands')
 const dgram = require('dgram')
 
 module.exports = class VplDriver extends Driver {
@@ -15,7 +15,7 @@ module.exports = class VplDriver extends Driver {
   _search() {
     if (!this.listening) {
       this.listening = true
-      this.server = dgram.createSocket({type: 'udp4', reuseAddr: true})
+      this.server = dgram.createSocket({ type: 'udp4', reuseAddr: true })
 
       this.server.on('message', (message, remote) => {
         if (message.length === 50) {
@@ -43,7 +43,7 @@ module.exports = class VplDriver extends Driver {
   getDevicesData(devices) {
     const getData = []
     for (const device of devices) {
-      const api = SdcpClient({port: device.privateData.port, address: device.privateData.address})
+      const api = SdcpClient({ port: device.privateData.port, address: device.privateData.address })
       getData.push(api.getPower())
     }
     return Promise.all(getData).then(data => {
@@ -60,7 +60,12 @@ module.exports = class VplDriver extends Driver {
     options[key] = newValue
     return this.setAction(device, options)
       .then(() => this.getDevicesData([device])
-        .then(data => this.lisa.createOrUpdateDevices(data[0])))
+        .then(devices => {
+          const device = devices[0]
+          device.data[key] = newValue
+          return device
+        })
+        .then(data => this.lisa.createOrUpdateDevices(data)))
   }
 
   setDevicesValue(devices, key, newValue) {
@@ -68,7 +73,7 @@ module.exports = class VplDriver extends Driver {
   }
 
   setAction(device, options) {
-    const api = SdcpClient({port: device.privateData.port, address: device.privateData.address}, this.log)
+    const api = SdcpClient({ port: device.privateData.port, address: device.privateData.address }, this.log)
     let action, data
 
     if (options.input1) {
@@ -119,7 +124,7 @@ module.exports = class VplDriver extends Driver {
           name: name,
           privateData: this._getDevicePrivateData(serial, remote),
           data: this._getDeviceData(power),
-          template: require('../../widgets/projector.json')
+          template: require('../widgets/projector.json')
         }
       }
 
@@ -132,7 +137,7 @@ module.exports = class VplDriver extends Driver {
       power: power === powerStatus.POWER_ON || power === powerStatus.START_UP || power === powerStatus.START_UP_LAMP ||
       power === 'ON' || power === 'WARMING' ?
         'on' : 'off',
-      values: {'off': '/images/widgets/tv_off.png', 'on': '/images/widgets/tv_on.png'}
+      values: { 'off': '/images/widgets/tv_off.png', 'on': '/images/widgets/tv_on.png' }
     }
   }
 
