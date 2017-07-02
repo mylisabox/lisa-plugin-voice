@@ -47,7 +47,7 @@ module.exports = class SonyVPLPlugin extends Plugin {
     return this.lisa.findDevices(criteria).then(devices => {
       const setStates = []
       devices.forEach(device => {
-        setStates.push(this.plugin.drivers.vpl.setAction(device, options))
+        setStates.push(this.drivers.vpl.setAction(device, options))
       })
       return Promise.all(setStates)
     })
