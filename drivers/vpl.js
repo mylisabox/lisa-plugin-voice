@@ -8,7 +8,12 @@ const dgram = require('dgram')
 
 module.exports = class VplDriver extends Driver {
   init() {
-    setInterval(this._search.bind(this), 60000)
+    if (this._refreshInterval) {
+      clearInterval(this._refreshInterval)
+      this._refreshInterval = null
+    }
+
+    this._refreshInterval = setInterval(this._search.bind(this), 60000)
     return this._search()
   }
 
@@ -97,6 +102,10 @@ module.exports = class VplDriver extends Driver {
   unload() {
     if (this.server) {
       this.server.close()
+    }
+    if (this._refreshInterval) {
+      clearInterval(this._refreshInterval)
+      this._refreshInterval = null
     }
     return Promise.resolve()
   }
