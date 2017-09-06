@@ -1,10 +1,10 @@
 module.exports = {
   name: {
-    en: 'Sony VPL projector',
-    fr: 'Projecteur Sony VPL'
+    en: 'L.I.S.A. standalone voice command',
+    fr: 'Commande vocale L.I.S.A. autonome'
   },
   description: {
-    en: 'Manage Sony VPL projectors',
-    fr: 'Gestion des projecteur Sony VPL'
+    en: 'L.I.S.A. standalone voice command',
+    fr: 'Commande vocale L.I.S.A. autonome'
   }
 }

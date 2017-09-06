@@ -1,1 +1,1 @@
-exports.vpl = require('./vpl')
+exports.voice = require('./voice')
