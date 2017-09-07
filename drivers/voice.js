@@ -4,22 +4,24 @@ const Driver = require('lisa-plugin').Driver
 
 module.exports = class LISAVoiceDriver extends Driver {
   init() {
-    this.devices = []
+    this.devices = {}
     // Make it work on raspberry pi by forcing ipv4
     const sequence = [
       this.lisa.mdns.rst.DNSServiceResolve(), 'DNSServiceGetAddrInfo' in this.lisa.mdns.dns_sd ?
         this.lisa.mdns.rst.DNSServiceGetAddrInfo() : this.lisa.mdns.rst.getaddrinfo({ families: [4] }),
       this.lisa.mdns.rst.makeAddressesUnique()
-    ];
+    ]
 
     this.browser = this.lisa.mdns.createBrowser(this.lisa.mdns.tcp('http'), { resolverSequence: sequence })
     this.browser.on('serviceUp', service => {
       if (service.name.indexOf('lisaVoiceCommand') !== -1) {
-        this.devices.push(service)
+        this.devices[service.txtRecord.identifier] = service
       }
     })
     this.browser.on('serviceDown', service => {
-
+      if (service.name.indexOf('lisaVoiceCommand') !== -1) {
+        delete this.devices[service.txtRecord.identifier]
+      }
     })
     this.browser.start()
     return Promise.resolve()
@@ -30,7 +32,7 @@ module.exports = class LISAVoiceDriver extends Driver {
   }
 
   _getIpV4Address(addresses) {
-    let add
+    let add = null
     addresses.forEach(address => {
       if (address.indexOf('::') === -1) {
         add = address
@@ -49,7 +51,8 @@ module.exports = class LISAVoiceDriver extends Driver {
         const myData = {
           devices: []
         }
-        for (const device of this.devices) {
+        for (const deviceIdentifier in this.devices) {
+          const device = this.devices[deviceIdentifier]
           const lisaDevice = lisaDevices.filter(lDevice =>
             lDevice.privateData.identifier === device.txtRecord.identifier)
           const ip = this._getIpV4Address(device.addresses)
