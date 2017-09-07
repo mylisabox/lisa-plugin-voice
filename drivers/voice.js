@@ -5,7 +5,14 @@ const Driver = require('lisa-plugin').Driver
 module.exports = class LISAVoiceDriver extends Driver {
   init() {
     this.devices = []
-    this.browser = this.lisa.mdns.createBrowser(this.lisa.mdns.tcp('http'))
+    // Make it work on raspberry pi by forcing ipv4
+    const sequence = [
+      this.lisa.mdns.rst.DNSServiceResolve(), 'DNSServiceGetAddrInfo' in this.lisa.mdns.dns_sd ?
+        this.lisa.mdns.rst.DNSServiceGetAddrInfo() : this.lisa.mdns.rst.getaddrinfo({ families: [4] }),
+      this.lisa.mdns.rst.makeAddressesUnique()
+    ];
+
+    this.browser = this.lisa.mdns.createBrowser(this.lisa.mdns.tcp('http'), { resolverSequence: sequence })
     this.browser.on('serviceUp', service => {
       if (service.name.indexOf('lisaVoiceCommand') !== -1) {
         this.devices.push(service)
