@@ -20,7 +20,11 @@ module.exports = class LISAVoiceDriver extends Driver {
     })
     this.browser.on('serviceDown', service => {
       if (service.name.indexOf('lisaVoiceCommand') !== -1) {
-        delete this.devices[service.txtRecord.identifier]
+        for (let identifier in this.devices) {
+          if (this.devices[identifier].name === service.name) {
+            delete this.devices[identifier]
+          }
+        }
       }
     })
     this.browser.start()
