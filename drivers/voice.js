@@ -1,33 +1,11 @@
 'use strict'
 
 const Driver = require('lisa-plugin').Driver
+const LisaDiscovery = require('lisa-discovery')
 
 module.exports = class LISAVoiceDriver extends Driver {
   init() {
     this.devices = {}
-    // Make it work on raspberry pi by forcing ipv4
-    const sequence = [
-      this.lisa.mdns.rst.DNSServiceResolve(), 'DNSServiceGetAddrInfo' in this.lisa.mdns.dns_sd ?
-        this.lisa.mdns.rst.DNSServiceGetAddrInfo() : this.lisa.mdns.rst.getaddrinfo({ families: [4] }),
-      this.lisa.mdns.rst.makeAddressesUnique()
-    ]
-
-    this.browser = this.lisa.mdns.createBrowser(this.lisa.mdns.tcp('http'), { resolverSequence: sequence })
-    this.browser.on('serviceUp', service => {
-      if (service.name.indexOf('lisaVoiceCommand') !== -1) {
-        this.devices[service.txtRecord.identifier] = service
-      }
-    })
-    this.browser.on('serviceDown', service => {
-      if (service.name.indexOf('lisaVoiceCommand') !== -1) {
-        for (let identifier in this.devices) {
-          if (this.devices[identifier].name === service.name) {
-            delete this.devices[identifier]
-          }
-        }
-      }
-    })
-    this.browser.start()
     return Promise.resolve()
   }
 
@@ -35,14 +13,30 @@ module.exports = class LISAVoiceDriver extends Driver {
     return this.lisa.createOrUpdateDevices(deviceData)
   }
 
-  _getIpV4Address(addresses) {
-    let add = null
-    addresses.forEach(address => {
-      if (address.indexOf('::') === -1) {
-        add = address
-      }
+  _discover() {
+    return new Promise((resolve, reject) => {
+      const multicastPort = 5544
+      const multicastAddress = '239.6.6.6'
+      const wantedMessage = 'lisa-voice-response'
+      const message = 'lisa-voice-search'
+      const devices = {}
+      const discovery = new LisaDiscovery({
+        multicastAddress: multicastAddress,
+        multicastPort: multicastPort,
+        trigger: wantedMessage,
+        callback: (input, address) => {
+          const identifier = input.replace(wantedMessage, '').trim()
+          devices[identifier] = address
+        }
+      })
+      discovery.start(() => {
+        discovery.sendMessage(message)
+        setTimeout(() => {
+          discovery.stop()
+          resolve(devices)
+        }, 800)
+      })
     })
-    return add
   }
 
   pairing(data) {
@@ -51,36 +45,36 @@ module.exports = class LISAVoiceDriver extends Driver {
       step: 'done'
     }
     if (!data['devices_list']) {
-      results = this.lisa.findDevices().then(lisaDevices => {
-        const myData = {
+      results = Promise.all([this._discover(), this.lisa.findDevices()]).then((data) => {
+        const newDevice = data[0]
+        const existingDevice = data[1]
+
+      const myData = {
           devices: []
         }
-        for (const deviceIdentifier in this.devices) {
-          const device = this.devices[deviceIdentifier]
-          const lisaDevice = lisaDevices.filter(lDevice =>
-            lDevice.privateData.identifier === device.txtRecord.identifier)
-          const ip = this._getIpV4Address(device.addresses)
+
+        for (const deviceIdentifier in newDevice) {
+          const deviceIp = newDevice[deviceIdentifier]
+          const lisaDevice = existingDevice.filter(lDevice => lDevice.privateData.identifier === deviceIdentifier)
           if (lisaDevice.length === 0) {
             myData.devices.push({
-              name: `${device.name} (${ip})`,
+              name: `L.I.S.A. voice (${deviceIp})`,
               image: '',
               driver: 'voice',
               template: {},
               type: this.lisa.DEVICE_TYPE.OTHER,
               data: {},
               privateData: {
-                ip: ip,
-                identifier: device.txtRecord.identifier
+                ip: deviceIp,
+                identifier: deviceIdentifier
               },
-              id: device.txtRecord.identifier
+              id: deviceIdentifier
             })
           }
         }
-
         myData.step = 'devices_list'
         return myData
       })
-
     }
     else {
       results = this.lisa.createOrUpdateDevices(data['devices_list'].map(device => {
@@ -97,8 +91,4 @@ module.exports = class LISAVoiceDriver extends Driver {
     return Promise.resolve(devices)
   }
 
-  unload() {
-    this.browser.stop()
-    return Promise.resolve()
-  }
 }
