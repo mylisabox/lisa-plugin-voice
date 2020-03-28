@@ -19,22 +19,23 @@ module.exports = class LISAVoiceDriver extends Driver {
       const multicastAddress = '239.6.6.6'
       const wantedMessage = 'lisa-voice-response'
       const message = 'lisa-voice-search'
-      const devices = {}
+
       const discovery = new LisaDiscovery({
         multicastAddress: multicastAddress,
         multicastPort: multicastPort,
         trigger: wantedMessage,
         callback: (input, address) => {
+          console.log(input, address)
           const identifier = input.replace(wantedMessage, '').trim()
-          devices[identifier] = address
+          this.devices[identifier] = address
         }
       })
       discovery.start(() => {
         discovery.sendMessage(message)
         setTimeout(() => {
           discovery.stop()
-          resolve(devices)
-        }, 800)
+          resolve(this.devices)
+        }, 2000)
       })
     })
   }
