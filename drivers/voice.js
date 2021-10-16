@@ -1,9 +1,7 @@
-'use strict'
+import LisaDiscovery from 'lisa-discovery';
+import {Driver} from 'lisa-plugin';
 
-const Driver = require('lisa-plugin').Driver
-const LisaDiscovery = require('lisa-discovery')
-
-module.exports = class LISAVoiceDriver extends Driver {
+export default class LISAVoiceDriver extends Driver {
   init() {
     this.devices = {}
     return Promise.resolve()
@@ -28,7 +26,7 @@ module.exports = class LISAVoiceDriver extends Driver {
           console.log(input, address)
           const identifier = input.replace(wantedMessage, '').trim()
           this.devices[identifier] = address
-        }
+        },
       })
       discovery.start(() => {
         discovery.sendMessage(message)
@@ -41,35 +39,32 @@ module.exports = class LISAVoiceDriver extends Driver {
   }
 
   pairing(data) {
-    let results = {
-      devices: [],
-      step: 'done'
-    }
+    let results;
     if (!data['devices_list']) {
       results = Promise.all([this._discover(), this.lisa.findDevices()]).then((data) => {
         const newDevice = data[0]
         const existingDevice = data[1]
 
-      const myData = {
-          devices: []
+        const myData = {
+          devices: [],
         }
 
         for (const deviceIdentifier in newDevice) {
           const deviceIp = newDevice[deviceIdentifier]
-          const lisaDevice = existingDevice.filter(lDevice => lDevice.privateData.identifier === deviceIdentifier)
+          const lisaDevice = existingDevice.filter((lDevice) => lDevice.privateData.identifier === deviceIdentifier)
           if (lisaDevice.length === 0) {
             myData.devices.push({
               name: `L.I.S.A. voice (${deviceIp})`,
-              image: '',
+              imageOn: 'lisa.svg',
+              imageOff: 'lisa.svg',
               driver: 'voice',
-              template: {},
               type: this.lisa.DEVICE_TYPE.OTHER,
               data: {},
               privateData: {
                 ip: deviceIp,
-                identifier: deviceIdentifier
+                identifier: deviceIdentifier,
               },
-              id: deviceIdentifier
+              id: deviceIdentifier,
             })
           }
         }
@@ -78,11 +73,11 @@ module.exports = class LISAVoiceDriver extends Driver {
       })
     }
     else {
-      results = this.lisa.createOrUpdateDevices(data['devices_list'].map(device => {
+      results = this.lisa.createOrUpdateDevices(data['devices_list'].map((device) => {
         delete device.id
         return device
       })).then(() => Promise.resolve({
-        step: 'done'
+        step: 'done',
       }))
     }
     return results instanceof Promise ? results : Promise.resolve(results)
@@ -91,5 +86,4 @@ module.exports = class LISAVoiceDriver extends Driver {
   getDevicesData(devices) {
     return Promise.resolve(devices)
   }
-
 }
